@@ -29,7 +29,7 @@ const MoonIcon = () => (
 );
 
 export const Header: React.FC<HeaderProps> = ({
-    siteDomain = 'photos.abhinavflac.com',
+    siteDomain = window.location.host,
     onThemeChange = () => { },
     currentTheme = 'system'
 }) => {
@@ -69,8 +69,8 @@ export const Header: React.FC<HeaderProps> = ({
                             <Link
                                 to="/"
                                 className={`py-0.5 px-1.5 cursor-pointer hover:bg-gray-100/60 active:bg-gray-100 dark:hover:bg-gray-900/75 dark:active:bg-gray-900 ${isFullView && !isGridView
-                                        ? 'text-black dark:text-white'
-                                        : 'text-gray-400 dark:text-gray-600 hover:text-gray-700 dark:hover:text-gray-400'
+                                    ? 'text-black dark:text-white'
+                                    : 'text-gray-400 dark:text-gray-600 hover:text-gray-700 dark:hover:text-gray-400'
                                     }`}
                             >
                                 <FullFrameIcon />
@@ -78,8 +78,8 @@ export const Header: React.FC<HeaderProps> = ({
                             <Link
                                 to="/grid"
                                 className={`py-0.5 px-1.5 cursor-pointer hover:bg-gray-100/60 active:bg-gray-100 dark:hover:bg-gray-900/75 dark:active:bg-gray-900 ${isGridView
-                                        ? 'text-black dark:text-white'
-                                        : 'text-gray-400 dark:text-gray-600 hover:text-gray-700 dark:hover:text-gray-400'
+                                    ? 'text-black dark:text-white'
+                                    : 'text-gray-400 dark:text-gray-600 hover:text-gray-700 dark:hover:text-gray-400'
                                     }`}
                             >
                                 <GridIcon />

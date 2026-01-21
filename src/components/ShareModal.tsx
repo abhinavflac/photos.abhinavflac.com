@@ -11,18 +11,34 @@ interface ShareModalProps {
 export const ShareModal: React.FC<ShareModalProps> = ({
     photo,
     isOpen,
-    onClose,
-    siteDomain = 'photos.abhinavflac.com'
+    onClose
 }) => {
     const [copied, setCopied] = useState(false);
 
     if (!isOpen) return null;
 
-    const shareUrl = `${siteDomain}/p/${photo.id}`;
+    const shareUrl = `${window.location.origin}/p/${photo.id}`;
 
     const handleCopyLink = async () => {
+        if (navigator.share) {
+            try {
+                await navigator.share({
+                    title: photo.title,
+                    text: `Check out this photo: ${photo.title}`,
+                    url: shareUrl,
+                });
+                return;
+            } catch (err) {
+                if ((err as Error).name !== 'AbortError') {
+                    console.error('Error sharing:', err);
+                } else {
+                    return;
+                }
+            }
+        }
+
         try {
-            await navigator.clipboard.writeText(`https://${shareUrl}`);
+            await navigator.clipboard.writeText(shareUrl);
             setCopied(true);
             setTimeout(() => setCopied(false), 2000);
         } catch (err) {
@@ -96,7 +112,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({
                         {/* Share URL */}
                         <div className="rounded-md w-full overflow-hidden flex items-center justify-stretch border border-gray-200 dark:border-gray-800">
                             <div className="truncate p-2 w-full text-sm">
-                                {shareUrl}
+                                {shareUrl.replace(/^https?:\/\//, '')}
                             </div>
                             <button
                                 onClick={handleCopyLink}

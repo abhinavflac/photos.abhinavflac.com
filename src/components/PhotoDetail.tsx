@@ -58,10 +58,10 @@ const PhotoDetail: React.FC<PhotoDetailProps> = ({ allPhotos = photos }) => {
                 <meta name="description" content={`Photo of ${photo.title} shot on ${photo.camera.model}`} />
                 <meta property="og:title" content={`${photo.title} - Abhinav's Pics!`} />
                 <meta property="og:description" content={`Photo of ${photo.title} shot on ${photo.camera.model}`} />
-                <meta property="og:image" content={`https://photos.abhinavflac.com${photo.src}`} />
+                <meta property="og:image" content={`${window.location.origin}${photo.src}`} />
                 <meta name="twitter:title" content={`${photo.title} - Abhinav's Pics!`} />
                 <meta name="twitter:description" content={`Photo of ${photo.title} shot on ${photo.camera.model}`} />
-                <meta name="twitter:image" content={`https://photos.abhinavflac.com${photo.src}`} />
+                <meta name="twitter:image" content={`${window.location.origin}${photo.src}`} />
             </Helmet>
 
             {/* Main Photo Section */}

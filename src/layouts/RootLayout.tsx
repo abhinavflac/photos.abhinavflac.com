@@ -12,16 +12,16 @@ const RootLayout: React.FC = () => {
         <main className="mb-3 lg:mb-6">
             <Helmet>
                 <title>Abhinav's Pics!</title>
-                <meta name="description" content="photos.abhinavflac.com" />
+                <meta name="description" content={window.location.host} />
                 <meta property="og:title" content="Abhinav's Pics!" />
-                <meta property="og:description" content="photos.abhinavflac.com" />
-                <meta property="og:image" content="https://photos.abhinavflac.com/home-image" />
+                <meta property="og:description" content={window.location.host} />
+                <meta property="og:image" content={`${window.location.origin}/home-image`} />
                 <meta name="twitter:card" content="summary_large_image" />
                 <meta name="twitter:creator" content="@abhinavflac" />
                 <meta name="twitter:site" content="@abhinavflac" />
                 <meta name="twitter:title" content="Abhinav's Pics!" />
-                <meta name="twitter:description" content="photos.abhinavflac.com" />
-                <meta name="twitter:image" content="https://photos.abhinavflac.com/home-image" />
+                <meta name="twitter:description" content={window.location.host} />
+                <meta name="twitter:image" content={`${window.location.origin}/home-image`} />
             </Helmet>
 
             {/* Header Section - Sticky at Top */}
@@ -31,6 +31,7 @@ const RootLayout: React.FC = () => {
                         <Header
                             onThemeChange={setTheme}
                             currentTheme={theme}
+                            siteDomain={window.location.host}
                         />
                     </div>
                 </div>
