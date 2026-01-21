@@ -5,6 +5,7 @@ import RootLayout from './layouts/RootLayout';
 import FullViewPage from './pages/FullViewPage';
 import GridViewPage from './pages/GridViewPage';
 import PhotoPage from './pages/PhotoPage';
+import FilteredPhotosPage from './pages/FilteredPhotosPage';
 
 const App: React.FC = () => {
     return (
@@ -15,6 +16,9 @@ const App: React.FC = () => {
                         <Route index element={<FullViewPage />} />
                         <Route path="grid" element={<GridViewPage />} />
                         <Route path="p/:photoId" element={<PhotoPage />} />
+                        <Route path="tag/:tagId" element={<FilteredPhotosPage />} />
+                        <Route path="shot-on/:make/:model" element={<FilteredPhotosPage />} />
+                        <Route path="focal/:length" element={<FilteredPhotosPage />} />
                     </Route>
                 </Routes>
             </ThemeProvider>

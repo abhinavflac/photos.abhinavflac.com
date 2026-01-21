@@ -5,6 +5,10 @@
             "destination": "/api/p/:id"
         },
         {
+            "source": "/tag/:tagId",
+            "destination": "/api/tag/:tagId"
+        },
+        {
             "source": "/((?!api|photos|favicons|assets|.*\\..*).*)",
             "destination": "/index.html"
         }
