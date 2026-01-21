@@ -40,39 +40,68 @@ export default async function handler(request) {
 
     const origin = url.origin;
 
-    // Generate HTML with proper OG meta tags
-    const html = `<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="/favicon.ico" />
-    <link rel="icon" href="/favicons/light.png" media="(prefers-color-scheme: light)" type="image/png" sizes="32x32" />
-    <link rel="icon" href="/favicons/dark.png" media="(prefers-color-scheme: dark)" type="image/png" sizes="32x32" />
-    <link rel="apple-touch-icon" href="/favicons/apple-touch-icon.png" type="image/png" sizes="180x180" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>${photo.title} - Abhinav's Pics!</title>
-    <meta name="description" content="Photo of ${photo.title} shot on ${photo.camera}" />
-    <meta property="og:title" content="${photo.title} - Abhinav's Pics!" />
-    <meta property="og:description" content="Photo of ${photo.title} shot on ${photo.camera}" />
-    <meta property="og:image" content="${origin}${photo.src}" />
-    <meta property="og:url" content="${origin}/p/${photo.id}" />
-    <meta property="og:type" content="article" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:creator" content="@abhinavflac" />
-    <meta name="twitter:site" content="@abhinavflac" />
-    <meta name="twitter:title" content="${photo.title} - Abhinav's Pics!" />
-    <meta name="twitter:description" content="Photo of ${photo.title} shot on ${photo.camera}" />
-    <meta name="twitter:image" content="${origin}${photo.src}" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <script type="module" crossorigin src="/assets/index.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index.css">
-</head>
-<body>
-    <div id="root"></div>
-</body>
-</html>`;
+    // Fetch the actual index.html from the origin to get correct asset paths
+    const indexResponse = await fetch(`${origin}/index.html`);
+    let html = await indexResponse.text();
+
+    // Replace the default meta tags with photo-specific ones
+    const photoTitle = `${photo.title} - Abhinav's Pics!`;
+    const photoDescription = `Photo of ${photo.title} shot on ${photo.camera}`;
+    const photoImage = `${origin}${photo.src}`;
+    const photoUrl = `${origin}/p/${photo.id}`;
+
+    // Replace title
+    html = html.replace(
+        /<title>.*?<\/title>/,
+        `<title>${photoTitle}</title>`
+    );
+
+    // Replace meta description
+    html = html.replace(
+        /<meta name="description" content="[^"]*"/,
+        `<meta name="description" content="${photoDescription}"`
+    );
+
+    // Replace OG tags
+    html = html.replace(
+        /<meta property="og:title" content="[^"]*"/,
+        `<meta property="og:title" content="${photoTitle}"`
+    );
+    html = html.replace(
+        /<meta property="og:description" content="[^"]*"/,
+        `<meta property="og:description" content="${photoDescription}"`
+    );
+    html = html.replace(
+        /<meta property="og:image" content="[^"]*"/,
+        `<meta property="og:image" content="${photoImage}"`
+    );
+
+    // Add og:url if not present, or replace it
+    if (html.includes('og:url')) {
+        html = html.replace(
+            /<meta property="og:url" content="[^"]*"/,
+            `<meta property="og:url" content="${photoUrl}"`
+        );
+    } else {
+        html = html.replace(
+            /<meta property="og:image" content="[^"]*"/,
+            `<meta property="og:image" content="${photoImage}"/>\n    <meta property="og:url" content="${photoUrl}"`
+        );
+    }
+
+    // Replace Twitter tags
+    html = html.replace(
+        /<meta name="twitter:title" content="[^"]*"/,
+        `<meta name="twitter:title" content="${photoTitle}"`
+    );
+    html = html.replace(
+        /<meta name="twitter:description" content="[^"]*"/,
+        `<meta name="twitter:description" content="${photoDescription}"`
+    );
+    html = html.replace(
+        /<meta name="twitter:image" content="[^"]*"/,
+        `<meta name="twitter:image" content="${photoImage}"`
+    );
 
     return new Response(html, {
         status: 200,
