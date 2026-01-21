@@ -44,16 +44,18 @@ export default async function handler(request) {
     const tagTitle = `${tagId.toUpperCase()} (${tagPhotos.length} Photos) - Abhinav's Pics!`;
     const tagDescription = `Collection of photos tagged with ${tagId}`;
 
-    // For the image, we'll try to use the first photo for now.
-    // Real collage generation is hard in Edge runtime without libraries.
-    const tagImage = `${origin}${tagPhotos[0].src}`;
+    // Generate multi-image tags for a collage effect on supporting platforms
+    const ogImageTags = tagPhotos.slice(0, 4)
+        .map(p => `<meta property="og:image" content="${origin}${p.src}" />`)
+        .join('\n    ');
+
     const tagUrl = `${origin}/tag/${tagId}`;
 
     html = html.replace(/<title>.*?<\/title>/, `<title>${tagTitle}</title>`);
     html = html.replace(/<meta name="description" content="[^"]*"/, `<meta name="description" content="${tagDescription}"`);
     html = html.replace(/<meta property="og:title" content="[^"]*"/, `<meta property="og:title" content="${tagTitle}"`);
     html = html.replace(/<meta property="og:description" content="[^"]*"/, `<meta property="og:description" content="${tagDescription}"`);
-    html = html.replace(/<meta property="og:image" content="[^"]*"/, `<meta property="og:image" content="${tagImage}"`);
+    html = html.replace(/<meta property="og:image" content="[^"]*"/, ogImageTags);
 
     if (html.includes('og:url')) {
         html = html.replace(/<meta property="og:url" content="[^"]*"/, `<meta property="og:url" content="${tagUrl}"`);
@@ -61,7 +63,7 @@ export default async function handler(request) {
 
     html = html.replace(/<meta name="twitter:title" content="[^"]*"/, `<meta name="twitter:title" content="${tagTitle}"`);
     html = html.replace(/<meta name="twitter:description" content="[^"]*"/, `<meta name="twitter:description" content="${tagDescription}"`);
-    html = html.replace(/<meta name="twitter:image" content="[^"]*"/, `<meta name="twitter:image" content="${tagImage}"`);
+    html = html.replace(/<meta name="twitter:image" content="[^"]*"/, `<meta name="twitter:image" content="${origin}${tagPhotos[0].src}"`);
 
     return new Response(html, {
         status: 200,
