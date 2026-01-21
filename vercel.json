@@ -1,7 +1,11 @@
 {
     "rewrites": [
         {
-            "source": "/(.*)",
+            "source": "/p/:id",
+            "destination": "/api/p/:id"
+        },
+        {
+            "source": "/((?!api|photos|favicons|assets|.*\\..*).*)",
             "destination": "/index.html"
         }
     ]
