@@ -97,20 +97,35 @@ a {
 }
 
 /* Image reveal animation */
-@keyframes fadeIn {
-    from {
+@keyframes scaleUpFade {
+    0% {
         opacity: 0;
-        transform: translateY(10px);
     }
 
-    to {
+    100% {
         opacity: 1;
-        transform: translateY(0);
+    }
+}
+
+.animate-scaleUp {
+    animation: scaleUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    opacity: 0;
+}
+
+/* Fade in animation */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
     }
 }
 
 .animate-fadeIn {
-    animation: fadeIn 0.5s ease-out forwards;
+    animation: fadeIn 1.5s ease-out forwards;
+    opacity: 0;
 }
 
 /* Interactive button styles */
